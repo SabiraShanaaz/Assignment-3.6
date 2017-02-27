@@ -1,0 +1,70 @@
+1.If 7TB is the available disk space per node (9 disks with 1 TB, 2 disk for operating system etc.
+were excluded.). Assuming initial data size is 600 TB. How will you estimate the number of data
+nodes (n)?
+
+
+Formula to calculate the number of data nodes is:
+ 
+          n= H/d = c*r*S/(1-i)*d 
+
+          H=c*r*s   
+                  and 
+
+          d=(1-i)*d
+
+where
+
+   *H = Hadoop storage 
+
+   *c = Average compression ratio.
+  
+         - Compression ratio refers to type of compression used.Otherwise c=1;
+
+   *r = Replication factor.
+     
+         - Replication factor is 3 in production cluster.
+
+   *s = Size of the data.
+
+        - The size of the data is needed to be moved to hadoop.It can be a combination of historical and incremental data.
+         
+
+   *i = Intermediate factor.
+         - Intermediate factor is usually 1/3 or 1/4.
+
+   *d = Disk space availability per node.
+
+
+    The solution is:
+       H=600TB   d=7TB
+
+      n = H/d
+        = 600/7
+        = 85.7
+ 
+Therfore,the number of nodes needed is 86.
+
+
+
+2.Imagine that you are uploading a file of 500MB into HDFS.100MB of data is successfully
+uploaded into HDFS and another client wants to read the uploaded data while the upload is still in
+progress. What will happen in such a scenario, will the 100 MB of data that is uploaded will it be
+displayed?
+
+
+ * The default block size in Hadoop 1x is 64 MB and Hadoop 2x is 128 MB.
+         Here we consider the block size to be 100 MB. 
+              So we have 5 blocks replicated thrice. 
+
+
+ * We have 5 blocks for a file, client, name node and data node . 
+         The client wil take the first block and approach the name node for data node location to store this block. 
+
+
+ * After the client is aware of the datanode information it will reach out to data node and start copying the first block. 
+         Now,the client will get confirmation on first block and it will start the same process for the second block. 
+
+
+ * Thus the reader can read the 100 MB uploaded data while the remaining upload is still in progress.  
+
+ 
